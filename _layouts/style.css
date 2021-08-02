@@ -1,0 +1,16 @@
+#ferret {
+    position: fixed;
+    background-image: url("ferret.png");
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+@media (min-width:1250px){.container{max-width:1200px!important;min-width:1200px!important;width:1200px!important}}
+body{background:url(https://www.putorius.net/wp-content/uploads/2020/01/tesoro-putorius.jpg.webp) 
+  bottom right no-repeat fixed}
+  .container.sh-header-additional{padding:1!important}
+  .sh-header-banner-container br{display:none}
+  .sh-header-mobile-dropdown{top:-21px}
+  .vc_custom_1552597395935{border-left-width:1px!important;
+                           padding-left:25px!important;
+                           border-left-color:#dbdbdb!important;
+                           border-left-style:solid!important}
