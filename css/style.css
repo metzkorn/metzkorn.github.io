@@ -1,4 +1,11 @@
 
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: inherit;
+}
+
+
 @media (min-width:1250px){.container{max-width:1200px!important;min-width:1200px!important;width:1200px!important}}
 body{background:url(https://www.putorius.net/wp-content/uploads/2020/01/tesoro-putorius.jpg.webp) 
   bottom right no-repeat fixed}
