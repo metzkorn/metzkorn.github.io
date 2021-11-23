@@ -9,7 +9,121 @@
 
 
 <body>  
-
+    <div id="pixel-demo">
+        <div id="main-canvas">
+          <canvas width="32" height="18" style="width: 64px; height: 36px;"></canvas>
+       </div>
+      </div>
+      <div id="color-palette">
+          <button data-color="#f0f0dc" style="background-color: rgb(240, 240, 220);"></button>
+          <button data-color="#fac800" style="background-color: rgb(250, 200, 0);" class=""></button>
+          <button data-color="#10c840" style="background-color: rgb(16, 200, 64);" class=""></button>
+          <button data-color="#00a0c8" style="background-color: rgb(0, 160, 200);" class="current-color"></button>
+          <button data-color="#d24040" style="background-color: rgb(210, 64, 64);" class=""></button>
+          <button data-color="#a0694b" style="background-color: rgb(160, 105, 75);"></button>
+          <button data-color="#736464" style="background-color: rgb(115, 100, 100);"></button>
+          <button data-color="#101820" class="" style="background-color: rgb(16, 24, 32);"></button>
+      </div>
+      <script>
+      // var characters = "knight,vampire,werewolf,witch,hero,villain,alien,villager,king,warrior,assassin,dancer,god",
+      //     tilesets = "grassy plains,volcano,beach,ocean,lake,moon,alien world,swamp,forest,desert,city,mountain,space,house,building",
+      //     pixelIdeas = [],
+      //     ideasGenerated = 0;
+      // (characters += ",person,animal,pet,bird,cat,dog,horse,sheep,pig,chicken,cow,fox,wolf,llama,bear,tiger,lion,koala,moose,deer").split(",").map(function (e) {
+      //     pixelIdeas.push(e + " sprite"), pixelIdeas.push(e + " portrait");
+      // }),
+      //     tilesets.split(",").map(function (e) {
+      //         pixelIdeas.push(e + " scene"), pixelIdeas.push(e + " tileset");
+      //     }),
+      //     document.querySelector("#generate-idea").addEventListener("click", function (e) {
+      //         (document.querySelector("#idea span").innerHTML = "a " + pixelIdeas[Math.floor(Math.random() * pixelIdeas.length)]),
+      //             (e.target.innerHTML = "Need another idea?"),
+      //             document.querySelector("#idea").classList.contains("visible") || document.querySelector("#idea").classList.add("visible"),
+      //             ga("send", "event", "Pixel Art Where To Start Idea Generated", ++ideasGenerated, null),
+      //             e.preventDefault();
+      //     });
+      var width = 32,
+          height = 18,
+          zoom = 18,
+          // Was f0f0dc
+          colors = ["#ffffff", "#fac800", "#10c840", "#00a0c8", "#d24040", "#a0694b", "#736464", "#101820"],
+          dragging = !1,
+          lastPos = [0, 0],
+          linesDrawn = 0,
+          colorsChanged = 0,
+          demoContainer = document.querySelector("#pixel-demo"),
+          canvasContainer = document.querySelector("#main-canvas"),
+          canvas = canvasContainer.querySelector("canvas"),
+          context = canvas.getContext("2d");
+          // previewCanvasContainer = document.querySelector("#preview-canvas"),
+          // previewCanvas = previewCanvasContainer.querySelector("canvas"),
+          // previewContext = previewCanvas.getContext("2d");
+      function resizeCanvas() {
+          var e = demoContainer.offsetWidth - 2 * parseFloat(getComputedStyle(canvasContainer).paddingLeft);
+          (zoom = Math.floor(e / width)),
+              (zoom = Math.min(zoom, 18)) * height > 0.5 * window.innerHeight && (zoom = Math.floor((0.5 * window.innerHeight) / height)),
+              (canvas.style.width = width * zoom + "px"),
+              (canvas.style.height = height * zoom + "px");
+      }
+      (canvas.width = width),
+          (canvas.height = height),
+          window.addEventListener("resize", resizeCanvas),
+          resizeCanvas(),
+          // (previewCanvas.width = width),
+          // (previewCanvas.height = height),
+          // (previewCanvas.style.width = 4 * width + "px"),
+          // (previewCanvas.style.height = 4 * height + "px"),
+          // (previewCanvasContainer.style.width = 4 * width + "px"),
+          // (previewCanvasContainer.style.height = 4 * height + "px"),
+          (context.fillStyle = colors[0]),
+          context.fillRect(0, 0, canvas.width, canvas.height),
+          (context.fillStyle = colors[colors.length - 1]);
+          // previewContext.drawImage(canvas, 0, 0);
+      for (var colorButtons = document.querySelectorAll("#color-palette button"), i = 0; i < colorButtons.length; i++)
+          (colorButtons[i].style.backgroundColor = colors[i]),
+              (colorButtons[i].dataset.color = colors[i]),
+              colorButtons[i].addEventListener("click", function () {
+                  document.querySelector("#color-palette button.current-color").classList.remove("current-color"), this.classList.add("current-color"), (context.fillStyle = this.dataset.color), colorsChanged++;
+              });
+      function line(e, t, o, n) {
+          for (var a = Math.abs(o - e), r = Math.abs(n - t), s = e < o ? 1 : -1, i = t < n ? 1 : -1, l = a - r; context.fillRect(e, t, 1, 1), e != o || t != n; ) {
+              var c = 2 * l;
+              c > -r && ((l -= r), (e += s)), c < a && ((l += a), (t += i));
+          }
+         // previewContext.drawImage(canvas, 0, 0);
+      }
+      function getCursorPosition(e) {
+          var t,
+              o,
+              n = canvas.getBoundingClientRect().left,
+              a = canvas.getBoundingClientRect().top + document.documentElement.scrollTop;
+          return (
+              e.touches
+                  ? ((t = e.touches[0].clientX + document.body.scrollLeft + document.documentElement.scrollLeft), (o = e.touches[0].clientY + document.body.scrollTop + document.documentElement.scrollTop))
+                  : ((t = e.pageX || e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft), (o = e.pageY || e.clientY + document.body.scrollTop + document.documentElement.scrollTop)),
+              [(t -= n), (o -= a)]
+          );
+      }
+      function mousedown(e) {
+          return (lastPos = getCursorPosition(e)), (dragging = !0), 1 == e.which && draw(e), e.target == canvas && e.preventDefault(), !1;
+      }
+      function mouseup(e) {
+          dragging && ((1 != ++linesDrawn && linesDrawn % 10 != 0)), (dragging = !1), e.target == canvas && e.preventDefault();
+          //ga("send", "event", "Pixel Art Where To Start Demo Used", linesDrawn, colorsChanged)), (dragging = !1), e.target == canvas && e.preventDefault();
+      }
+      function draw(e) {
+          var t = getCursorPosition(e);
+          dragging && e.target == canvas && (line(Math.floor(lastPos[0] / zoom), Math.floor(lastPos[1] / zoom), Math.floor(t[0] / zoom), Math.floor(t[1] / zoom)), (lastPos = t)), e.target == canvas && e.preventDefault();
+      }
+      colorButtons[colorButtons.length - 1].classList.add("current-color"),
+          canvas.addEventListener("mousedown", mousedown, !1),
+          canvas.addEventListener("touchstart", mousedown, !1),
+          window.addEventListener("mouseup", mouseup, !1),
+          window.addEventListener("touchend", mouseup, !1),
+          canvas.addEventListener("mousemove", draw, !1),
+          canvas.addEventListener("touchmove", draw, !1);
+      </script>
+      
 This is my blog. I sort of half-committed to using the minimal style Jekyll thing I've seen for the backend, but I also wanted to try my hand at writing some of my own html. So this first page is mine. How to link it to the rest of my pages? 
 Not sure yet. That's a work in progress. 
 
