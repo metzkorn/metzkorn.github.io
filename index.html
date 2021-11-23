@@ -3,177 +3,18 @@
     
 </head>
 <h1> 
-    有一天我会开始写一些思路
+    Ravings of a Hardware Madman  硬件逢人之胡言乱语
 </h1><div id = "ferret"></div>
 <link rel="stylesheet" type=text/css href="css/style.css"> 
-<style> 
-   canvas{
-       image-rendering: pixelated;
-   }
-</style> 
+
+
 <body>  
-    <div id="pixel-demo">
-      <div id="main-canvas">
-        <canvas width="32" height="18" style="width: 64px; height: 36px;"></canvas>
-     </div>
-    </div>
-    <div id="color-palette">
-        <button data-color="#f0f0dc" style="background-color: rgb(240, 240, 220);"></button>
-        <button data-color="#fac800" style="background-color: rgb(250, 200, 0);" class=""></button>
-        <button data-color="#10c840" style="background-color: rgb(16, 200, 64);" class=""></button>
-        <button data-color="#00a0c8" style="background-color: rgb(0, 160, 200);" class="current-color"></button>
-        <button data-color="#d24040" style="background-color: rgb(210, 64, 64);" class=""></button>
-        <button data-color="#a0694b" style="background-color: rgb(160, 105, 75);"></button>
-        <button data-color="#736464" style="background-color: rgb(115, 100, 100);"></button>
-        <button data-color="#101820" class="" style="background-color: rgb(16, 24, 32);"></button>
-    </div>
-    <script>
-    // var characters = "knight,vampire,werewolf,witch,hero,villain,alien,villager,king,warrior,assassin,dancer,god",
-    //     tilesets = "grassy plains,volcano,beach,ocean,lake,moon,alien world,swamp,forest,desert,city,mountain,space,house,building",
-    //     pixelIdeas = [],
-    //     ideasGenerated = 0;
-    // (characters += ",person,animal,pet,bird,cat,dog,horse,sheep,pig,chicken,cow,fox,wolf,llama,bear,tiger,lion,koala,moose,deer").split(",").map(function (e) {
-    //     pixelIdeas.push(e + " sprite"), pixelIdeas.push(e + " portrait");
-    // }),
-    //     tilesets.split(",").map(function (e) {
-    //         pixelIdeas.push(e + " scene"), pixelIdeas.push(e + " tileset");
-    //     }),
-    //     document.querySelector("#generate-idea").addEventListener("click", function (e) {
-    //         (document.querySelector("#idea span").innerHTML = "a " + pixelIdeas[Math.floor(Math.random() * pixelIdeas.length)]),
-    //             (e.target.innerHTML = "Need another idea?"),
-    //             document.querySelector("#idea").classList.contains("visible") || document.querySelector("#idea").classList.add("visible"),
-    //             ga("send", "event", "Pixel Art Where To Start Idea Generated", ++ideasGenerated, null),
-    //             e.preventDefault();
-    //     });
-    var width = 32,
-        height = 18,
-        zoom = 18,
-        // Was f0f0dc
-        colors = ["#ffffff", "#fac800", "#10c840", "#00a0c8", "#d24040", "#a0694b", "#736464", "#101820"],
-        dragging = !1,
-        lastPos = [0, 0],
-        linesDrawn = 0,
-        colorsChanged = 0,
-        demoContainer = document.querySelector("#pixel-demo"),
-        canvasContainer = document.querySelector("#main-canvas"),
-        canvas = canvasContainer.querySelector("canvas"),
-        context = canvas.getContext("2d");
-        // previewCanvasContainer = document.querySelector("#preview-canvas"),
-        // previewCanvas = previewCanvasContainer.querySelector("canvas"),
-        // previewContext = previewCanvas.getContext("2d");
-    function resizeCanvas() {
-        var e = demoContainer.offsetWidth - 2 * parseFloat(getComputedStyle(canvasContainer).paddingLeft);
-        (zoom = Math.floor(e / width)),
-            (zoom = Math.min(zoom, 18)) * height > 0.5 * window.innerHeight && (zoom = Math.floor((0.5 * window.innerHeight) / height)),
-            (canvas.style.width = width * zoom + "px"),
-            (canvas.style.height = height * zoom + "px");
-    }
-    (canvas.width = width),
-        (canvas.height = height),
-        window.addEventListener("resize", resizeCanvas),
-        resizeCanvas(),
-        // (previewCanvas.width = width),
-        // (previewCanvas.height = height),
-        // (previewCanvas.style.width = 4 * width + "px"),
-        // (previewCanvas.style.height = 4 * height + "px"),
-        // (previewCanvasContainer.style.width = 4 * width + "px"),
-        // (previewCanvasContainer.style.height = 4 * height + "px"),
-        (context.fillStyle = colors[0]),
-        context.fillRect(0, 0, canvas.width, canvas.height),
-        (context.fillStyle = colors[colors.length - 1]);
-        // previewContext.drawImage(canvas, 0, 0);
-    for (var colorButtons = document.querySelectorAll("#color-palette button"), i = 0; i < colorButtons.length; i++)
-        (colorButtons[i].style.backgroundColor = colors[i]),
-            (colorButtons[i].dataset.color = colors[i]),
-            colorButtons[i].addEventListener("click", function () {
-                document.querySelector("#color-palette button.current-color").classList.remove("current-color"), this.classList.add("current-color"), (context.fillStyle = this.dataset.color), colorsChanged++;
-            });
-    function line(e, t, o, n) {
-        for (var a = Math.abs(o - e), r = Math.abs(n - t), s = e < o ? 1 : -1, i = t < n ? 1 : -1, l = a - r; context.fillRect(e, t, 1, 1), e != o || t != n; ) {
-            var c = 2 * l;
-            c > -r && ((l -= r), (e += s)), c < a && ((l += a), (t += i));
-        }
-       // previewContext.drawImage(canvas, 0, 0);
-    }
-    function getCursorPosition(e) {
-        var t,
-            o,
-            n = canvas.getBoundingClientRect().left,
-            a = canvas.getBoundingClientRect().top + document.documentElement.scrollTop;
-        return (
-            e.touches
-                ? ((t = e.touches[0].clientX + document.body.scrollLeft + document.documentElement.scrollLeft), (o = e.touches[0].clientY + document.body.scrollTop + document.documentElement.scrollTop))
-                : ((t = e.pageX || e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft), (o = e.pageY || e.clientY + document.body.scrollTop + document.documentElement.scrollTop)),
-            [(t -= n), (o -= a)]
-        );
-    }
-    function mousedown(e) {
-        return (lastPos = getCursorPosition(e)), (dragging = !0), 1 == e.which && draw(e), e.target == canvas && e.preventDefault(), !1;
-    }
-    function mouseup(e) {
-        dragging && ((1 != ++linesDrawn && linesDrawn % 10 != 0)), (dragging = !1), e.target == canvas && e.preventDefault();
-        //ga("send", "event", "Pixel Art Where To Start Demo Used", linesDrawn, colorsChanged)), (dragging = !1), e.target == canvas && e.preventDefault();
-    }
-    function draw(e) {
-        var t = getCursorPosition(e);
-        dragging && e.target == canvas && (line(Math.floor(lastPos[0] / zoom), Math.floor(lastPos[1] / zoom), Math.floor(t[0] / zoom), Math.floor(t[1] / zoom)), (lastPos = t)), e.target == canvas && e.preventDefault();
-    }
-    colorButtons[colorButtons.length - 1].classList.add("current-color"),
-        canvas.addEventListener("mousedown", mousedown, !1),
-        canvas.addEventListener("touchstart", mousedown, !1),
-        window.addEventListener("mouseup", mouseup, !1),
-        window.addEventListener("touchend", mouseup, !1),
-        canvas.addEventListener("mousemove", draw, !1),
-        canvas.addEventListener("touchmove", draw, !1);
-    </script>
 
-<table border="0">
-    <tr>
-       <td><b style="font-size:30px">Div Class Column Would be Better</b></td>
-       <td><b style="font-size:30px">Don't you think?</b></td>
-    </tr>
-    <tr>
-       <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus risus justo, bibendum sed varius quis, blandit ac augue. Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed imperdiet pellentesque justo, non condimentum augue dapibus vel. Nullam dictum gravida urna quis semper. Proin maximus, nibh vel dapibus pharetra, mi odio sagittis ex, nec sollicitudin mauris eros eu libero. Sed risus lectus, consequat ut purus ut, rhoncus rhoncus ipsum. Duis quis finibus dolor. Nullam consectetur eget quam et venenatis. Quisque a luctus erat, sed tempus erat. Fusce ornare risus ut turpis interdum, in efficitur ex sagittis. Nulla ut semper tellus. Fusce varius eros eget quam porttitor, sed posuere elit viverra.
+This is my blog. I sort of half-committed to using the minimal style Jarvis thing I've seen for the backend, but I also wanted to try my hand at writing some of my own html. So this first page is mine. How to link it to the rest of my pages? 
+Not sure yet. That's a work in progress. 
 
-        Cras eget molestie arcu, nec vulputate justo. Sed pellentesque sit amet elit ut dictum. Fusce ut elit vel sem ornare varius. Vivamus iaculis nulla nec magna consequat iaculis. Nulla ut rhoncus neque. Nullam ac tellus sed risus aliquet pulvinar. Aliquam sit amet fermentum lectus.
-        
-        Phasellus arcu enim, interdum quis libero ac, lacinia lacinia quam. Nulla vel consequat lorem. Nunc fringilla posuere tortor, nec mollis nulla hendrerit nec. Maecenas ullamcorper ante in libero sagittis, posuere venenatis ipsum condimentum. Proin nec dolor in urna scelerisque maximus eu id sapien. Duis sit amet nunc id lacus pellentesque aliquam. Aenean in ante nisl. Nam lobortis fermentum urna in luctus. Pellentesque sit amet cursus diam. Ut a tempus turpis, ac sagittis diam. Praesent sapien enim, blandit in aliquam ut, imperdiet a orci. Cras a lorem leo. Duis quis ornare sapien.
-        
-        Nulla rutrum quam ac arcu facilisis pulvinar. Donec ac imperdiet dolor, sed euismod mauris. Etiam orci urna, lobortis sed egestas et, faucibus vel turpis. Phasellus at vehicula nunc. In hac habitasse platea dictumst. Curabitur vitae lectus sem. Fusce vulputate diam quis fringilla blandit. Aenean ac est orci. Ut viverra diam vitae nibh suscipit maximus. Mauris eu quam tellus. Cras vitae tortor eros. Morbi nisl quam, fringilla et auctor condimentum, blandit a magna.
-        
-        Aenean porta lacinia eros, ac semper dui varius ac. Donec tincidunt gravida diam, blandit finibus erat lacinia eget. Suspendisse potenti. Nulla tempor pellentesque nisi, eu sollicitudin dolor aliquam quis. Suspendisse potenti. Vivamus rhoncus viverra odio ac tempor. Donec quis velit ut dui auctor sagittis sit amet ac diam. Fusce tempus arcu ultrices odio placerat lobortis. Nunc auctor ipsum vitae elit auctor, quis molestie sapien venenatis. Suspendisse a lorem eu nulla mattis aliquam. Donec non massa commodo, porta eros sit amet, tempus mauris.
-        
-        Nunc nisi est, iaculis ut lacus et, facilisis porta felis. Maecenas ut dignissim ligula, vitae molestie orci. Sed eu suscipit neque. Sed eu scelerisque sapien. Etiam vestibulum id augue a gravida. Nulla congue dictum purus, a ultricies risus scelerisque ut. Nulla eget odio a quam euismod porttitor. Morbi sed augue erat. In ac justo venenatis sem tristique aliquet sed vel tortor.
-        
-        Mauris non mauris commodo, dignissim orci et, fringilla metus. Sed justo est, aliquet id orci vitae, tincidunt laoreet lorem. Ut efficitur ante augue, eget maximus mi mattis nec. Nam eleifend pretium libero, vitae posuere mauris euismod vel. Donec vitae lobortis ex. Duis sed vestibulum dolor. Cras eu augue in ante commodo tincidunt. Sed faucibus pellentesque urna, at pellentesque augue pretium non. Praesent bibendum, lectus eget consectetur cursus, ante lacus luctus magna, ac varius orci tellus nec ipsum. Vestibulum cursus urna ut leo venenatis aliquam. Duis dignissim at dui id semper. In bibendum, diam eget tincidunt vestibulum, turpis est interdum orci, id elementum ipsum leo sit amet odio. Donec suscipit augue facilisis molestie posuere. Morbi sodales nibh metus, non efficitur mauris gravida ut. Pellentesque dictum, enim at venenatis dignissim, mauris elit viverra sapien, non venenatis mauris dolor at libero.
-        
-        Praesent et sodales eros. Curabitur neque nulla, ornare eu maximus posuere, vehicula a elit. Pellentesque vitae eros ultrices tortor elementum rhoncus. Nulla non sem suscipit, hendrerit orci id, sagittis mauris. Mauris dolor justo, aliquam in viverra at, tempus sit amet ligula. Ut eget quam viverra, porta risus sed, pretium felis. Nam eu elit a ligula gravida fermentum. Pellentesque ornare est dignissim, vestibulum dui nec, tempus purus. Etiam ultricies est eros, vel posuere sem faucibus luctus. Nullam et sapien eget nulla vulputate sollicitudin. Nam a libero diam. Mauris consectetur quam odio, vel ullamcorper nisl ultrices non. Praesent finibus sagittis nisi, sed gravida est blandit at. Mauris vehicula ligula id felis euismod facilisis. Etiam pharetra gravida risus laoreet porttitor.
-        
-        Vivamus vel dui vel lectus consequat accumsan..</td>
-       <td> Proin vitae tempor <a href=tellus.html>tellus</a>. Vestibulum id viverra lacus. Suspendisse condimentum tempus massa in vulputate. Curabitur eu hendrerit lacus. Suspendisse in vestibulum magna, eu tempus velit. Maecenas vehicula finibus dolor, vitae feugiat urna aliquam nec.
+这是我的博客，我先开始用Jarvis的极简风格主题，但是我想开发自己的html. 怎么链接到Jarvis? 我还不知道， 我还需要时间开发这个网站
 
-        Vivamus felis justo, tempor ornare suscipit quis, ornare ut erat. Sed vitae elit sapien. Quisque magna justo, sodales sed gravida quis, auctor vel nulla. Donec vitae molestie mi. Nam feugiat nisl eget ultrices elementum. Aliquam convallis posuere mauris at aliquam. Cras ac aliquam dolor, eget vehicula mauris. Mauris vitae mi arcu. In sit amet porta leo, eu venenatis dui. Nullam vitae dolor augue.
-        
-        Nullam a lectus mi. Sed fringilla erat vel pharetra auctor. Suspendisse ultricies nibh ipsum, in tristique eros auctor ut. Maecenas varius vitae lectus nec vulputate. Nunc dapibus lobortis pellentesque. Proin sit amet dui leo. Nulla vitae elit in mi convallis dapibus. Quisque vel tellus neque. Donec id urna bibendum, fermentum dui et, varius mauris. Ut accumsan eleifend nisl nec ultricies. Morbi sed ante felis. Etiam eu dolor dictum, congue purus quis, pellentesque leo. Nunc laoreet, diam in mollis fringilla, nisi mauris tempor nisi, id aliquet lectus orci vitae diam.
-        
-        Mauris id leo et tortor vehicula faucibus. Curabitur a lectus iaculis tellus venenatis interdum at sit amet augue. Vestibulum posuere augue in purus feugiat faucibus. Nullam auctor interdum sem vitae interdum. Sed scelerisque diam dolor, et molestie dolor lacinia a. Fusce nec dignissim velit, quis maximus sapien. Nunc bibendum nunc eros, sed porta enim laoreet at.
-        
-        Morbi ac mi ut purus fringilla viverra eu eu turpis. Mauris sit amet tortor at enim consequat efficitur id vitae lorem. Vestibulum quis tempor tellus, et aliquet elit. Vivamus pretium viverra ante eget commodo. Suspendisse potenti. Aenean convallis ac eros ac bibendum. In tristique justo accumsan condimentum rutrum. Aenean vitae ante fermentum ligula euismod ultrices. Phasellus erat ipsum, tincidunt ac ipsum non, pulvinar condimentum lorem. Curabitur tincidunt nibh urna, at pretium neque laoreet consectetur. Suspendisse ac iaculis felis. Vestibulum eget ligula non ipsum dapibus congue viverra sagittis diam. Mauris fringilla, mauris nec mollis ornare, nibh dui hendrerit sapien, quis hendrerit orci lorem at urna. Morbi pellentesque neque ligula, ac tincidunt dolor congue ut. Aliquam dignissim, libero quis commodo sodales, tortor augue rhoncus felis, facilisis laoreet est nunc vitae tellus. Nullam ut ultricies orci.
-        
-        Donec aliquet dolor erat, at facilisis est consectetur sed. Vestibulum consectetur congue dolor, in rhoncus massa. Sed vel aliquam purus. Ut hendrerit accumsan eros quis tincidunt. Praesent vestibulum ligula ut lacinia dignissim. Aliquam blandit tempor lectus, ac facilisis urna porttitor eu. Nam rhoncus velit enim, ac pulvinar lectus ornare eu. Donec accumsan fermentum rhoncus. Nullam id vestibulum felis. Mauris sit amet purus volutpat, faucibus sapien et, convallis justo. Mauris auctor quis augue eget sagittis. Duis egestas rutrum nisi, eu volutpat mi condimentum eget.
-        
-        Fusce vulputate, massa sit amet volutpat malesuada, magna ligula ultrices augue, ac tincidunt erat diam sit amet leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper dui sed eleifend fermentum. Pellentesque id diam aliquet, tempus lacus id, tempor felis. Suspendisse potenti. Integer tempus sagittis felis eget lobortis. Sed lacus ipsum, consectetur at interdum in, placerat sit amet nisl. Mauris nec velit augue. Nam venenatis luctus justo in eleifend. Maecenas ultrices lacus quis urna feugiat tristique. Fusce non sagittis libero.
-        
-        Vivamus rutrum mauris et porta laoreet. Sed luctus ultricies vehicula. Sed sagittis suscipit leo, ut suscipit tellus vulputate sit amet. Mauris bibendum sodales arcu, in elementum justo porta accumsan. Praesent vitae odio nulla. Nam in eros dolor. Duis tempor consectetur nisi eu posuere. Morbi nec pulvinar justo. Nulla diam purus, fringilla ut metus id, sollicitudin tempor arcu. Morbi sit amet pulvinar quam. Morbi ligula justo, fermentum quis auctor eu, venenatis id dolor. Donec imperdiet dui ut sollicitudin lacinia. Praesent nec vestibulum nunc. Duis vulputate, risus tempus luctus ultricies, magna tortor efficitur nunc, id dapibus nulla eros eget mi. Cras blandit, mi ut ullamcorper egestas, libero est vehicula lectus, vel ullamcorper urna ipsum quis metus.
-        
-        Integer a fermentum lorem. Mauris nulla lectus, venenatis sed felis ut, blandit viverra purus. Nullam sed purus felis. Duis vehicula vehicula urna ac finibus. Suspendisse non metus id lacus maximus ullamcorper. Ut quis ex non est placerat pretium sed ut ipsum. Fusce interdum ex at tincidunt elementum. Suspendisse aliquam aliquam velit, non fermentum arcu luctus at. Nullam malesuada lacinia mattis. Nullam fringilla, ipsum quis consequat congue, nibh massa vestibulum nisi, id vulputate arcu nunc vitae mi. Sed consequat faucibus justo, et dictum enim. Nam fermentum purus at magna euismod eleifend. Vestibulum aliquam, est in scelerisque malesuada, sem velit vestibulum augue, in tincidunt erat ligula id nibh.
-        
-        Vestibulum cursus nisi ac urna efficitur, at rutrum lorem iaculis. Aliquam quis maximus quam. Etiam rhoncus interdum fermentum. Mauris vitae ornare dui. Donec malesuada augue eget dolor molestie, sit amet tincidunt ipsum sollicitudin. Proin sed purus eget ex mollis pellentesque id ut magna. Donec vulputate mi vel imperdiet pulvinar. Integer ultricies et ex nec malesuada. Sed luctus egestas mollis. Mauris porttitor egestas augue ut hendrerit.
-        
-        Praesent vestibulum augue a metus bibendum, quis ornare risus euismod. Pellentesque ac volutpat orci, a placerat dolor. In vel mi eget magna consequat interdum in vitae turpis. Fusce faucibus nulla sit amet vestibulum auctor. In semper lacinia ultricies. Donec quis egestas lorem, at pharetra massa. Cras finibus erat in ligula lobortis, vel auctor metus accumsan. Fusce porttitor sit amet dui eget mattis. Quisque sed ipsum at ipsum dictum ullamcorper et et ex. Vivamus tristique sit amet enim id porttitor. Cras porttitor, lorem a gravida pretium, dolor tortor blandit justo, nec iaculis arcu leo sed lacus. Curabitur nec ex magna. Duis elementum, est vel blandit fringilla, arcu orci pulvinar nibh, sed dapibus orci tortor vel risus.
-        
-        Sed dapibus eget nulla vel cursus. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin eu venenatis leo. Sed mattis libero eget dui eleifend, id sagittis mi tristique. In pretium mauris ullamcorper lorem pretium bibendum. Praesent egestas, nisi sed molestie ultrices, dolor ligula efficitur est, a volutpat libero odio eget lacus. Quisque vitae vestibulum sem. In lacus massa, rhoncus viverra orci non, volutpat congue magna. Vivamus tincidunt bibendum diam, id molestie diam convallis elementum. Fusce at tortor quis risus condimentum commodo et eget lectus. Integer nibh dui, mollis vitae quam et, facilisis semper eros. Suspendisse eget orci lorem.</td>
-    </tr>
-   </table>
+我的中文和英文的版本不完全一样，我还没学完中文，还不那么流利，如果发现错误，希望会说中文的朋友会帮助我哦
 
 </body>
